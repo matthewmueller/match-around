@@ -1,0 +1,16 @@
+{
+  "name": "match-around",
+  "repo": "matthewmueller/match-around",
+  "description": "match around a text offset",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {},
+  "development": {
+    "component/assert": "*"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js"
+  ]
+}
