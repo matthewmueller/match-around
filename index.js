@@ -45,21 +45,37 @@ function around(pattern, text, offset) {
   var rlen = rstr.length;
 
   var str;
+  var m = null;
 
   // loop until both sides have been traversed
   while(llen > 0 || rlen > 0) {
 
     // test for match
-    if (match(str = at(i, i)) && largest(str, i, i)) return str.match(pattern);
+    if (match(str = at(i, i)) && largest(str, i, i)) {
+      m = str.match(pattern);
+      m.start = before(i, str) ? m.index - i : m.index;
+      m.end = m.start + m[0].length;
+      return m;
+    }
 
     // traverse left
     for (j = i - 1; j >= 0; j--) {
-      if (match(str = at(j, i)) && largest(str, j, i)) return str.match(pattern);
+      if (match(str = at(j, i)) && largest(str, j, i)) {
+        m = str.match(pattern);
+        m.start = before(j, str) ? m.index - j : m.index;
+        m.end = m.start + m[0].length;
+        return m;
+      }
     }
 
     // traverse up
     for (j = i - 1; j >= 0; j--) {
-      if (match(str = at(i, j)) && largest(str, i, j)) return str.match(pattern);
+      if (match(str = at(i, j)) && largest(str, i, j)) {
+        m = str.match(pattern);
+        m.start = before(i, str) ? m.index - i : m.index;
+        m.end = m.start + m[0].length;
+        return m;
+      }
     }
 
     i++;
@@ -67,7 +83,20 @@ function around(pattern, text, offset) {
     rlen--;
   }
 
-  return null;
+  return m;
+
+  /**
+   * Invert if the start value is before
+   * the offset
+   *
+   * @param {Number} r
+   * @param {String} str
+   * @return {Boolean}
+   */
+
+  function before(r, str) {
+    return ~rstr.slice(0, r).indexOf(str) ? false : true;
+  }
 
   /**
    * Check if there's a match
